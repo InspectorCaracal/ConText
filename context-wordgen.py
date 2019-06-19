@@ -44,8 +44,6 @@ def generate(lang, wordlist):
       dice = randint(0,9)
       if dice < x:
         syllables.append(Syllable(consonants))
-      else:
-        syllables.append(Syllable(vowels))
         
   stem = Stem(syllables, balance=syl_balance, filters=filters,
     prefix=syl_bounds[0], infix=syl_bounds[1], suffix=syl_bounds[2])
