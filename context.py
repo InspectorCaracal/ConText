@@ -7,10 +7,16 @@ import sys
 lang = str(sys.argv[1])
 oper = str(sys.argv[2])
 
-# oper == "define"
-# generates new words and assigns them to meanings in a list
-# requires sys.argv[3] of a file containing a list of part of speech|definition pairs separated by lines
-# uses words namespace
+if oper == "define":
+  with open(sys.argv[3]) as wordfile: #I assume it will fail with an error if it's not a valid/existing file
+    wordlist = []
+    for line in wordfile:
+      item = line.split("|")
+      #if len(item) > 2:
+        # return an error
+      wordlist.append(item)
+    words.generate(lang, wordlist)
+
 
 # oper == "translate"
 # accesses the stored dictionary to translate words and syntax and apply necessary inflection and sound-change rules
