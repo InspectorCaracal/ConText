@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-import context-wordgen as words
+import context_wordgen as words
 import sys
 
 # return error if len(sys.argv) < 4
- 
 lang = str(sys.argv[1])
 oper = str(sys.argv[2])
 
 if oper == "define":
+  print("defining words")
   with open(sys.argv[3]) as wordfile: #I assume it will fail with an error if it's not a valid/existing file
     wordlist = []
     for line in wordfile:
