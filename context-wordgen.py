@@ -25,11 +25,20 @@ def generate(lang, wordlist):
   word_initial = phonemes[2] if len(phonemes) > 2 else None
   word_final = phonemes[3] if len(phonemes) > 3 else None
   
-  # index+1 is syll number, value is weight
-  syllable_balance = [5, 2]
+  syl_balance = []
 
-  # process filter rules here
-  #  syl_struct = f[0]
+  with open(lang+"/syllables.txt","r") as f:
+    syl_struct = f[0]
+    syl_bounds = f[1]
+    syl_balance = f[2].split(",")
+    
+  filters = []
+  with open(lang+"/filters/simple.txt","r") as f:
+    for line in f:
+      filters.append(SimpleFilter(line))
+  with open(lang+"/filters/regex.txt","r") as f:
+    for line in f:
+      filters.append(RegexFilter(line))
 
   for i,x in enumerate(syl_struct):
     if i == 0 and word_initial not None:
@@ -42,7 +51,8 @@ def generate(lang, wordlist):
       elif x is "V":
         syllables.append(Syllable(vowels, position=[1,-1]))
         
-#  stem = Stem(syllables, balance=syllable_balance, filters=filters, prefix="<", infix="#", suffix=">")
+  stem = Stem(syllables, balance=syl_balance, filters=filters,
+    prefix=syl_bounds[0], infix=syl_bounds[1], suffix=syl_bounds[2])
 
   for worddef in wordlist:
     pos, word = worddef.split("|")
