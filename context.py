@@ -11,10 +11,7 @@ if oper == "define":
   with open(sys.argv[3]) as wordfile: #I assume it will fail with an error if it's not a valid/existing file
     wordlist = []
     for line in wordfile:
-      item = line.split("|")
-      #if len(item) > 2:
-        # return an error
-      wordlist.append(item)
+      wordlist.append(line)
     words.generate(lang, wordlist)
 
 
