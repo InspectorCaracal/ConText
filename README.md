@@ -13,13 +13,7 @@ The phonemes file goes in your language directory, named `phonemes.txt`
 
 Phoneme sets are divided by lines. If you have an optional consonant place, define a placeholder "blank" character in the list of consonants.
 
-The first line is your vowels. Your second line is your general or mid-word consonants. If you have a different set of consonants for the beginning or end of a word, that goes on the next two lines. `Even if you only have one`. Just copy your regular consonant line to the one that doesn't get a special case.
-
-Recap:
-1. Vowels
-2. Consonants
-3. Word-initial consonants
-4. Word-final consonants
+The first line is your vowels. Your second line is your consonants.
 
 Each phoneme set is divided into a "grapheme" and "weight" pair. The grapheme is just how you personally want to represent your phonemes: it could be an IPA character, for example, or it could just be regular letters like "th". The weight is a number indicating how likely that phoneme is to show up. Higher numbers mean more likely.
 
@@ -28,7 +22,11 @@ An example vowel phoneme set might look like:
 a,2|e,5|i,3|y,5|o,4|ou,1|u,1
 
 ### Syllable Structure
-The rules for your syllable structures go in a file in your language directory, named `syllables.txt`
+The rules for your syllable structures go in a file in your language directory, named `syllables.txt`.
+
+The first line is your vowel/consonant pattern. Optional consonants are represented by a single digit number rather instead of an uppercase C, rather than the usual (C). This is because the number represents how likely a consonant will show up there.
+
+e.g. instead of writing CV(C), write CV8 for an 80% chance of a CVC syllable, and a 20% chance of a CV syllable.
 
 ### Filters
 Rules about what phoneme patterns and combinations can't happen. These are in your language directory in a subdirectory, `filters`
