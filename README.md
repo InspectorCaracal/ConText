@@ -31,7 +31,11 @@ e.g. instead of writing CV(C), write CV8 for an 80% chance of a CVC syllable, an
 ### Filters
 Rules about what phoneme patterns and combinations can't happen. These are in your language directory in a subdirectory, `filters`
 
-`filters/simple.txt` is a list of simple combinations that can't exist. (More info later.) `filters/regex.txt` is where you can define more complex rules as regular expressions.
+`filters/simple.txt` is a list of simple combinations that can't exist. For example, if you can't end a word in an x and your word end-boundary character is >, you can enter `x>` as a line in simple.txt - or if you can't have a b and a q next to each other, and your syllable boundary is |, then you can enter two lines: `b|q` and `q|b` to prevent that combination.
+
+`filters/regex.txt` is where you can define more complex rules as regular expressions.
+
+*Sound changes, as opposed to phonetic taboos, are handled elsewhere and have not been added yet.*
 
 ### Writing
 The writing system for your language's phonemes to be written as go in a file in your language directory, named *writing.txt*

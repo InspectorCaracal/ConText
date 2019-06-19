@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from genling import *
+from random import randint
 
 def phonemize(item):
   pw = item.split(",")
@@ -16,14 +17,8 @@ def generate(lang, wordlist):
       phonelist = list(map(phonemize,phonelist))
       phonemes.append(phonelist)
 
-  init_segments = []
-  segments = []
-  final_segments = []
-  
   vowels = phonemes[0]
   consonants = phonemes[1]
-  word_initial = phonemes[2] if len(phonemes) > 2 else None
-  word_final = phonemes[3] if len(phonemes) > 3 else None
   
   syl_balance = []
 
@@ -41,15 +36,16 @@ def generate(lang, wordlist):
       filters.append(RegexFilter(line))
 
   for i,x in enumerate(syl_struct):
-    if i == 0 and word_initial not None:
-      syllables.append(Syllable(word_initial, position=1))
-    elif i == len(syl_struct)-1 and word_final not None:
-      syllables.append(Syllable(word_final, position=-1))
+    if x is "C":
+      syllables.append(Syllable(consonants))
+    elif x is "V":
+      syllables.append(Syllable(vowels))
     else:
-      if x is "C":
-        syllables.append(Syllable(consonants, position=[1,-1]))
-      elif x is "V":
-        syllables.append(Syllable(vowels, position=[1,-1]))
+      dice = randint(0,9)
+      if dice < x:
+        syllables.append(Syllable(consonants))
+      else:
+        syllables.append(Syllable(vowels))
         
   stem = Stem(syllables, balance=syl_balance, filters=filters,
     prefix=syl_bounds[0], infix=syl_bounds[1], suffix=syl_bounds[2])
