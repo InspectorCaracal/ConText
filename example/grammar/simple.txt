@@ -1,0 +1,7 @@
+NOM.SG|>,-ɹa>
+NOM.PL|>,-ɹæ>
+ACC.SG|>,-za>
+ACC.PL|>,-zæ>
+PAST|>,-kit>
+PRES|>,-kɛ>
+FUT|>,-kɛs>

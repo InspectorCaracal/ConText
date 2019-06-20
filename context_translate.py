@@ -22,33 +22,69 @@ def process(lang,wordary):
   written = []
   pronunc = []
   
+  # syllable bounds for cleanup
   with open(lang+"/syllables.txt","r") as f:
     lines = f.readlines()
     syl_bounds = lines[1]
-
   cleanup = []
   for x in syl_bounds:
     cleanup.append(SimpleReplace(x,""))
-  pro_word = Word(cleanup)
   
+  # grammar parsing
+  grammar = {}
+  with open(lang+"/grammar/simple.txt","r", encoding='utf-8-sig') as f:
+    for line in f:
+      item = line.split("|",1)
+      if len(item) > 1:
+        rep = item[1].split(",",1)
+        if len(rep) > 1:
+            grammar[item[0]] = SimpleReplace(rep[0],rep[1].strip())
+  with open(lang+"/grammar/regex.txt","r", encoding='utf-8-sig') as f:
+    for line in f:
+      item = line.split("|",1)
+      if len(item) > 1:
+        rep = item[1].split(",",1)
+        if len(rep) > 1:
+            grammar[item[0]] = RegexReplace(rep[0],rep[1].strip())
+  
+  # writing system replacements from raw
   writing = []
   with open(lang+"/writing/simple.txt","r", encoding='utf-8-sig') as f:
     for line in f:
-      rep = line.split(",")
+      rep = line.split(",",1)
       if len(rep) > 1:
         writing.append(SimpleReplace(rep[0],rep[1].strip()))
   with open(lang+"/writing/regex.txt","r", encoding='utf-8-sig') as f:
     for line in f:
-      rep = line.split(",")
+      rep = line.split(",",1)
       if len(rep) > 1:
         writing.append(RegexReplace(rep[0],rep[1].strip()))
-  writ_word = Word(cleanup + writing)
+  writ_word = Word(writing + cleanup)
+
+  # pronunciation change replacements from raw
+  reading = []
+  with open(lang+"/sound_changes/simple.txt","r", encoding='utf-8-sig') as f:
+    for line in f:
+      rep = line.split(",",1)
+      if len(rep) > 1:
+        reading.append(SimpleReplace(rep[0],rep[1].strip()))
+  with open(lang+"/sound_changes/regex.txt","r", encoding='utf-8-sig') as f:
+    for line in f:
+      rep = line.split(",",1)
+      if len(rep) > 1:
+        reading.append(RegexReplace(rep[0],rep[1].strip()))
+  read_word = Word(reading + cleanup)
 
   c = conn.cursor()
   for item in wordary:
   # process for grammar
-    nuword = get_word(c,item)
-    pronunc.append(pro_word.create(nuword))
+    parts = item.split("+")
+    if len(parts) > 1:
+      nuword = get_word(c,parts[0])
+      nuword = grammar[parts[1]].apply(nuword)
+    else:
+      nuword = get_word(c,item)
+    pronunc.append(read_word.create(nuword))
     written.append(writ_word.create(nuword))
   conn.close()
   print(' '.join(wordary))
