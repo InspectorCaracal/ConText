@@ -4,12 +4,19 @@ import sys
 import sqlite3
 from pathlib import Path
 
-# return error if len(sys.argv) < 3
+if len(sys.argv) < 3:
+  sys.exit("Insufficient arguments")
+
 lang = str(sys.argv[1])
 oper = str(sys.argv[2])
 
 if oper == "create":
+  if not Path(lang).is_dir():
+    sys.exit("Language directory for "+lang+" does not exist.")
   # error if sys.argv[3] isn't set
+  chk = Path(sys.argv[3]).is_file() if len(sys.argv) > 3 else None
+  if chk is None or chk is False:
+    sys.exit("Invalid filename provided for word list.")
   print("creating new words")
   wordlist = []
   with open(sys.argv[3]) as wordfile: #I assume it will fail with an error if it's not a valid/existing file
@@ -50,8 +57,9 @@ if oper == "initialize":
   try:
     conn = sqlite3.connect(lang+"/dictionary.db")
     c = conn.cursor()
-    c.execute('''CREATE TABLE WORDS
-             ([id] INTEGER PRIMARY KEY,[definition] text, [part_of_speech] text, [spoken] text, [written] text)''')
+    c.execute("""CREATE TABLE words
+      ([id] INTEGER PRIMARY KEY AUTOINCREMENT,
+       [definition] TEXT, [part_of_speech] TEXT, [raw] TEXT)""")
     conn.commit()
   except sqlite3.Error as e:
     print(e)
