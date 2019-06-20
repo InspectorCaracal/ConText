@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import context_wordgen as words
+import context_translate as trans
 import sys
 import sqlite3
 from pathlib import Path
@@ -23,15 +24,22 @@ if oper == "create":
     for line in wordfile:
       wordlist.append(line)
   
-  newlist = words.generate(lang, wordlist)
-  # each item in newlist: item[0] def, item[1] pos, item[2] created word in raw format
-  # save to database
+  if words.generate(lang, wordlist):
+    print("\nWords added to dictionary.")
 
 # oper == "define"
 # allows you to add new entries directly to the dictionary without having to mess with db software
 # requires sys.argv[3] as a filename of definitions
 
-# oper == "translate"
+if oper == "translate":
+  if not Path(lang).is_dir():
+    sys.exit("Language directory for "+lang+" does not exist.")
+  phrase = sys.argv[3:] if len(sys.argv) > 3 else None
+  if phrase is None:
+    sys.exit("Nothing to translate!")
+  trans.process(lang,phrase)
+  
+  
 # accesses the stored dictionary to translate words and syntax and apply necessary inflection and sound-change rules
 # requires sys.argv[3:] as a string to be translated
 # uses trans namespace

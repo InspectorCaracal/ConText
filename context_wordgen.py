@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from genling import *
-from random import randint
 import sqlite3
 
 def phonemize(item):
@@ -55,12 +54,19 @@ def generate(lang, wordlist):
   for x in syl_bounds:
     cleanup.append(SimpleReplace(x,""))
 
-  conn = sqlite3.connect(lang+"/dictionary.db")
+  try:
+    conn = sqlite3.connect(lang+"/dictionary.db")
+  except sqlite3.Error as e:
+    return e
+
   c = conn.cursor()
   new_word = "INSERT INTO words (definition, part_of_speech, raw) VALUES (?, ?, ?)"
   for worddef in wordlist:
     pos, word = worddef.split("|")
-    c.execute(new_word, (word.strip(), pos, stem.generate()) )
+    genned = stem.generate()
+    c.execute(new_word, (word.strip(), pos, genned) )
+    print(word.strip()+", "+pos+"\n"+genned)
     
+  conn.commit()
   conn.close()
-  return newwords
+  return True
