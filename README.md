@@ -3,7 +3,43 @@ a tool for creating and working with constructed languages
 
 credit to [genling](https://github.com/2sh/genling) as the word-generator library I'm using
 
-Full documentation will be in eventually. Right now this is just notes on usage as I go.
+*this documentation is still in progress
+
+## Installation
+1. Make sure you have Python 3 installed, preferably the version that comes with pip
+2. `pip install genling`
+3. Clone or download this repository to wherever you want the tool installed.
+
+## Usage
+Basic syntax: `python context.py [language] [command] [parameters]`
+
+### initialize
+`python context.py [language] initialize`
+
+Builds a new skeleton directory named `[language]`, where you can then enter all of your language's phonemes and other rules. See the **Language Files** section for details on the contents of this directory. 
+
+### create
+`python context.py [language] create [filename]`
+
+Takes a file containing a list of definitions, generates new words for the definitions and adds them to the database. Definitions cannot include spaces. See `create_example.txt` for an example of how the file is structured.
+
+### translate
+`python context.py [language] translate [sentence or phrase]`
+
+Takes a string of words to be translated. Grammatical changes are attached by a + and part of speech with a . (not yet implemented). You have to get your word order right on your own, sorry!
+
+ex.
+`the cat.n+NOM.SG walk.v+PAST`
+
+This will eventually have an alternative usage where you can provide it with two file names and it will take the first and write the results to the second.
+
+### not yet implemented
+`python context.py [language] define [filename]`
+Like create, except you provide your own raw conlang words to add to the database.
+
+`python context.py help`
+What you'd expect in a help command.
+
 
 ## Language Files
 Create a directory for your language: this will be the term you use to reference your language when you work with it. e.g. if you have a language named *bob* then you want to make a directory `bob/` and run the script as `context.py bob [other stuff]`
@@ -39,11 +75,16 @@ Rules about what phoneme patterns and combinations can't happen. These are in yo
 
 `filters/regex.txt` is where you can define more complex rules as regular expressions.
 
-*Sound changes, as opposed to phonetic taboos, are handled elsewhere and have not been added yet.*
+### Sound changes
+Rules for changes in *pronunciation only*. They will not affect how the word is written or the raw word data, which allows the sound changes to vary between the raw stem form and the grammatically inflected form. These are located in a subdirectory in your language directory, `sound_changes`
+
+`sound_changes/simple.txt` is a list of simple replacements, each on their own line. For example, if you want to drop ʃ when it occurs after ʧ, you could add a line: `ʧʃ,ʧ`
+
+`sound_changes/regex.txt` is where you can define more complex mutations and replacements as regular expressions. This is also how you can change the sound of phonemes at the beginning or end of a word.
 
 ### Writing
 The writing system for your language to be written in goes in a subdirectory of your language directory, named `writing`
 
 `writing/simple.txt` is a list of simple phoneme replacements, each on their own line. For example, if you have θ in your phonemes but want it to be written as th: `θ,th`
 
-`filters/regex.txt` is where you can define more complex replacements as regular expressions. I don't actually know how this works, check out genling's documentation or code I guess??
+`writing/regex.txt` is where you can define more complex replacements as regular expressions.
