@@ -73,7 +73,7 @@ def process(lang,wordary):
       rep = line.split(",",1)
       if len(rep) > 1:
         reading.append(RegexReplace(rep[0],rep[1].strip()))
-  read_word = Word(reading + cleanup)
+  read_word = Word(cleanup + reading)
 
   c = conn.cursor()
   for item in wordary:

@@ -39,15 +39,6 @@ if oper == "translate":
     sys.exit("Nothing to translate!")
   trans.process(lang,phrase)
   
-  
-# accesses the stored dictionary to translate words and syntax and apply necessary inflection and sound-change rules
-# requires sys.argv[3:] as a string to be translated
-# uses trans namespace
-
-# oper == "initialize"
-# creates a skeleton directory for a new language; dir must not already exist
-# also initializes database
-
 if oper == "initialize":
   dir = Path(lang)
   try:
