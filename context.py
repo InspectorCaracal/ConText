@@ -57,10 +57,15 @@ if oper == "initialize":
 
   Path(lang+"/phonemes.txt").touch()
   Path(lang+"/syllables.txt").touch()
-  Path(lang+"/sound_changes.txt").touch()
   Path(lang+"/filters").mkdir()
   Path(lang+"/filters/simple.txt").touch()
   Path(lang+"/filters/regex.txt").touch()
+  Path(lang+"/writing").mkdir()
+  Path(lang+"/writing/simple.txt").touch()
+  Path(lang+"/writing/regex.txt").touch()
+  Path(lang+"/sound_changes").mkdir()
+  Path(lang+"/sound_changes/simple.txt").touch()
+  Path(lang+"/sound_changes/regex.txt").touch()
   
   try:
     conn = sqlite3.connect(lang+"/dictionary.db")
