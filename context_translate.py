@@ -32,12 +32,12 @@ def process(lang,wordary):
   pro_word = Word(cleanup)
   
   writing = []
-  with open(lang+"/writing/simple.txt","r", encoding='utf8') as f:
+  with open(lang+"/writing/simple.txt","r", encoding='utf-8-sig') as f:
     for line in f:
       rep = line.split(",")
       if len(rep) > 1:
         writing.append(SimpleReplace(rep[0],rep[1].strip()))
-  with open(lang+"/writing/regex.txt","r", encoding='utf8') as f:
+  with open(lang+"/writing/regex.txt","r", encoding='utf-8-sig') as f:
     for line in f:
       rep = line.split(",")
       if len(rep) > 1:

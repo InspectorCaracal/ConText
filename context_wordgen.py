@@ -10,7 +10,7 @@ def generate(lang, wordlist):
   phonemes = []
   syl_struct = []
 
-  with open(lang+"/phonemes.txt","r", encoding='utf8') as f:
+  with open(lang+"/phonemes.txt","r", encoding='utf-8-sig') as f:
     for line in f:
       phonelist = line.split("|")
       phonelist = list(map(phonemize,phonelist))
@@ -28,10 +28,10 @@ def generate(lang, wordlist):
     syl_balance = list(map(int,lines[2].split(",")))
     
   filters = []
-  with open(lang+"/filters/simple.txt","r", encoding='utf8') as f:
+  with open(lang+"/filters/simple.txt","r", encoding='utf-8-sig') as f:
     for line in f:
       filters.append(SimpleFilter(line))
-  with open(lang+"/filters/regex.txt","r", encoding='utf8') as f:
+  with open(lang+"/filters/regex.txt","r", encoding='utf-8-sig') as f:
     for line in f:
       filters.append(RegexFilter(line))
 
