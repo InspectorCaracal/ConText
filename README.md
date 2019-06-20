@@ -3,7 +3,7 @@ a tool for creating and working with constructed languages
 
 credit to [genling](https://github.com/2sh/genling) as the word-generator library I'm using
 
-*this documentation is still in progress
+*this documentation is still in progress*
 
 ### To-Do
 
