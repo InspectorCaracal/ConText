@@ -19,14 +19,18 @@ Each phoneme set is divided into a "grapheme" and "weight" pair. The grapheme is
 
 An example vowel phoneme set might look like:
 
-a,2|e,5|i,3|y,5|o,4|ou,1|u,1
+`a,2|e,5|i,3|y,5|o,4|ou,1|u,1`
 
 ### Syllable Structure
 The rules for your syllable structures go in a file in your language directory, named `syllables.txt`.
 
-The first line is your vowel/consonant pattern. Optional consonants are represented by a single digit number rather instead of an uppercase C, rather than the usual (C). This is because the number represents how likely a consonant will show up there.
+The first line are your vowel/consonant patterns. Divide all possible syllable patterns by | separators. If you want to have different frequencies for the different patterns, you can add a weight after them with a comma.
 
-e.g. instead of writing CV(C), write CV8 for an 80% chance of a CVC syllable, and a 20% chance of a CV syllable.
+ex. 1
+`CV|CVC|CCVC`
+
+ex. 2
+`CV,8|CVC,4|CCVC,1`
 
 ### Filters
 Rules about what phoneme patterns and combinations can't happen. These are in your language directory in a subdirectory, `filters`
@@ -38,4 +42,4 @@ Rules about what phoneme patterns and combinations can't happen. These are in yo
 *Sound changes, as opposed to phonetic taboos, are handled elsewhere and have not been added yet.*
 
 ### Writing
-The writing system for your language's phonemes to be written as go in a file in your language directory, named *writing.txt*
+The writing system for your language to be written in goes in a file in your language directory, named `writing.txt`

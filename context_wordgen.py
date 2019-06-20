@@ -7,10 +7,8 @@ def phonemize(item):
   return Phoneme(pw[0],int(pw[1]))
 
 def generate(lang, wordlist):
-  syllables = []
   phonemes = []
-  segments = []
-  syl_struct = ''
+  syl_struct = []
 
   with open(lang+"/phonemes.txt","r") as f:
     for line in f:
@@ -25,7 +23,7 @@ def generate(lang, wordlist):
 
   with open(lang+"/syllables.txt","r") as f:
     lines = f.readlines()
-    syl_struct = lines[0]
+    syl_struct = lines[0].split("|")
     syl_bounds = lines[1]
     syl_balance = list(map(int,lines[2].split(",")))
     
@@ -37,17 +35,17 @@ def generate(lang, wordlist):
     for line in f:
       filters.append(RegexFilter(line))
 
-  for x in syl_struct:
-    if x is "C":
-      segments.append(Segment(consonants))
-    elif x is "V":
-      segments.append(Segment(vowels))
-    elif x.isdigit():
-      dice = randint(0,9)
-      if dice < int(x):
+  syllables = []
+  for syllable in syl_struct:
+    segments = []
+    syl = syllable.split(",")
+    for x in syl[0]:
+      if x is "C":
         segments.append(Segment(consonants))
-
-  syllables = [ Syllable(segments) ]
+      elif x is "V":
+        segments.append(Segment(vowels))
+    weight = int(syl[1]) if len(syl) > 1 else 1
+    syllables.append( Syllable(segments, weight=weight) )
         
   stem = Stem(syllables, balance=syl_balance, filters=filters,
     prefix=syl_bounds[0], infix=syl_bounds[1], suffix=syl_bounds[2])
@@ -61,6 +59,6 @@ def generate(lang, wordlist):
     #if len(item) > 2:
       #return an error
     newword = stem.generate()
-    print(word, newword)
+    print(word.strip() + ", "+ pos, "\n", newword)
     # use pos to apply appropriate Word rules
     # store new word info in dictionary db

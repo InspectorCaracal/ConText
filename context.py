@@ -6,14 +6,18 @@ import sys
 lang = str(sys.argv[1])
 oper = str(sys.argv[2])
 
-if oper == "define":
-  print("defining words")
+if oper == "create":
+  print("creating new words")
+  wordlist = []
   with open(sys.argv[3]) as wordfile: #I assume it will fail with an error if it's not a valid/existing file
-    wordlist = []
     for line in wordfile:
       wordlist.append(line)
-    words.generate(lang, wordlist)
+  
+  words.generate(lang, wordlist)
 
+# oper == "define"
+# allows you to add new entries directly to the dictionary without having to mess with db software
+# requires sys.argv[3] as a filename of definitions
 
 # oper == "translate"
 # accesses the stored dictionary to translate words and syntax and apply necessary inflection and sound-change rules
