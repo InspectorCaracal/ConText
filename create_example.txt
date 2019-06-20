@@ -1,15 +1,9 @@
 n|cat
-
 n|house
-
 n|floor
-
 v|walk
-
 v|talk
-
 v|sleep
-
 article|the
 pron|they
 n|new_growth_in_spring
