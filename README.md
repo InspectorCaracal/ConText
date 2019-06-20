@@ -42,4 +42,8 @@ Rules about what phoneme patterns and combinations can't happen. These are in yo
 *Sound changes, as opposed to phonetic taboos, are handled elsewhere and have not been added yet.*
 
 ### Writing
-The writing system for your language to be written in goes in a file in your language directory, named `writing.txt`
+The writing system for your language to be written in goes in a subdirectory of your language directory, named `writing`
+
+`writing/simple.txt` is a list of simple phoneme replacements, each on their own line. For example, if you have θ in your phonemes but want it to be written as th: `θ,th`
+
+`filters/regex.txt` is where you can define more complex replacements as regular expressions. I don't actually know how this works, check out genling's documentation or code I guess??
