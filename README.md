@@ -5,6 +5,15 @@ credit to [genling](https://github.com/2sh/genling) as the word-generator librar
 
 *this documentation is still in progress
 
+### To-Do
+
+- Properly handle synonyms in translated sentences.
+- Alternate translation syntax of `translate --files input.txt output.txt`
+- Add manual vocab addition instead of purely generated vocabulary
+- `help` command
+- fill all the files in the example language with at least two items
+- different syllable balances for different parts of speech (most significantly so articles and pronouns can be biased towards fewer syllables)
+
 ## Installation
 1. Make sure you have Python 3 installed, preferably the version that comes with pip
 2. `pip install genling`
