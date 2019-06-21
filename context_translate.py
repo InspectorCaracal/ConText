@@ -73,10 +73,14 @@ def process(lang,wordary):
   read_word = Word(cleanup + reading)
 
   c = conn.cursor()
+  missing = []
   for item in wordary:
   # process for grammar
     parts = item.split("+")
     nuwords = get_word(c,parts[0])
+    if len(nuwords) < 1:
+      missing.append(item)
+      continue
     pwords = []
     wwords = []
     for word in nuwords:
@@ -94,6 +98,10 @@ def process(lang,wordary):
     pronunc.append(read_word.create(pwords))
     written.append(writ_word.create(wwords))
   conn.close()
-  print(' '.join(wordary))
-  print("spoken: "+' '.join(pronunc))
-  print("written: "+' '.join(written))
+  if len(missing) < 1:
+    print(' '.join(wordary))
+    print("spoken: "+' '.join(pronunc))
+    print("written: "+' '.join(written))
+  else:
+    print("Undefined vocabulary:")
+    print(', '.join(missing))
