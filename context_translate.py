@@ -9,8 +9,8 @@ def get_word(c,definition,pos=False):
   else:
     query = "SELECT raw FROM words WHERE definition=? AND part_of_speech=?"
     c.execute(query, (definition, pos) )
-  result = c.fetchone()
-  return result[0]
+  result = c.fetchall()
+  return result
   
   
 def process(lang,wordary):
@@ -79,13 +79,23 @@ def process(lang,wordary):
   for item in wordary:
   # process for grammar
     parts = item.split("+")
-    if len(parts) > 1:
-      nuword = get_word(c,parts[0])
-      nuword = grammar[parts[1]].apply(nuword)
-    else:
-      nuword = get_word(c,item)
-    pronunc.append(read_word.create(nuword))
-    written.append(writ_word.create(nuword))
+    nuwords = get_word(c,parts[0])
+    pwords = []
+    wwords = []
+    for word in nuwords:
+      if len(parts) > 1:
+        nuword = grammar[parts[1]].apply(word[0])
+      else:
+        nuword = word[0]
+      pwords.append(read_word.create(nuword))
+      wwords.append(writ_word.create(nuword))
+    pwords = "|".join(pwords)
+    wwords = "|".join(wwords)
+    if len(nuwords) > 1:
+      pwords = "("+pwords+")"
+      wwords = "("+wwords+")"
+    pronunc.append(read_word.create(pwords))
+    written.append(writ_word.create(wwords))
   conn.close()
   print(' '.join(wordary))
   print("spoken: "+' '.join(pronunc))
