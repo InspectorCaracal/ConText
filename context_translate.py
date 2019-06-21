@@ -12,7 +12,38 @@ def get_word(c,definition,pos=False):
   result = c.fetchall()
   return result
   
-  
+def get_replacements(path):
+  replacements = []
+  with open(path+"simple.txt","r", encoding='utf-8-sig') as f:
+    for line in f:
+      rep = line.split(",",1)
+      if len(rep) > 1:
+        replacements.append(SimpleReplace(rep[0],rep[1].strip()))
+  with open(path+"regex.txt","r", encoding='utf-8-sig') as f:
+    for line in f:
+      rep = line.split(",",1)
+      if len(rep) > 1:
+        replacements.append(RegexReplace(rep[0],rep[1].strip()))
+  return replacements
+
+def get_replacement_dict(path):
+  replacements = {}
+  with open(path+"simple.txt","r", encoding='utf-8-sig') as f:
+    for line in f:
+      item = line.split("|",1)
+      if len(item) > 1:
+        rep = item[1].split(",",1)
+        if len(rep) > 1:
+            replacements[item[0]] = SimpleReplace(rep[0],rep[1].strip())
+  with open(path+"regex.txt","r", encoding='utf-8-sig') as f:
+    for line in f:
+      item = line.split("|",1)
+      if len(item) > 1:
+        rep = item[1].split(",",1)
+        if len(rep) > 1:
+          replacements[item[0]] = RegexReplace(rep[0],rep[1].strip())
+  return replacements
+
 def process(lang,wordary):
   try:
     conn = sqlite3.connect(lang+"/dictionary.db")
@@ -31,48 +62,14 @@ def process(lang,wordary):
     cleanup.append(SimpleReplace(x,""))
   
   # grammar parsing
-  grammar = {}
-  with open(lang+"/grammar/simple.txt","r", encoding='utf-8-sig') as f:
-    for line in f:
-      item = line.split("|",1)
-      if len(item) > 1:
-        rep = item[1].split(",",1)
-        if len(rep) > 1:
-            grammar[item[0]] = SimpleReplace(rep[0],rep[1].strip())
-  with open(lang+"/grammar/regex.txt","r", encoding='utf-8-sig') as f:
-    for line in f:
-      item = line.split("|",1)
-      if len(item) > 1:
-        rep = item[1].split(",",1)
-        if len(rep) > 1:
-            grammar[item[0]] = RegexReplace(rep[0],rep[1].strip())
+  grammar = get_replacement_dict(lang+"/grammar/")
   
   # writing system replacements from raw
-  writing = []
-  with open(lang+"/writing/simple.txt","r", encoding='utf-8-sig') as f:
-    for line in f:
-      rep = line.split(",",1)
-      if len(rep) > 1:
-        writing.append(SimpleReplace(rep[0],rep[1].strip()))
-  with open(lang+"/writing/regex.txt","r", encoding='utf-8-sig') as f:
-    for line in f:
-      rep = line.split(",",1)
-      if len(rep) > 1:
-        writing.append(RegexReplace(rep[0],rep[1].strip()))
+  writing = get_replacements(lang+"/writing/")
   writ_word = Word(writing + cleanup)
 
   # pronunciation change replacements from raw
-  reading = []
-  with open(lang+"/sound_changes/simple.txt","r", encoding='utf-8-sig') as f:
-    for line in f:
-      rep = line.split(",",1)
-      if len(rep) > 1:
-        reading.append(SimpleReplace(rep[0],rep[1].strip()))
-  with open(lang+"/sound_changes/regex.txt","r", encoding='utf-8-sig') as f:
-    for line in f:
-      rep = line.split(",",1)
-      if len(rep) > 1:
-        reading.append(RegexReplace(rep[0],rep[1].strip()))
+  reading = get_replacements(lang+"/sound_changes/")
   read_word = Word(cleanup + reading)
 
   c = conn.cursor()
